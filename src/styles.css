@@ -40,6 +40,10 @@ main {
   color: #9290C3;
 }
 
+.task.done {
+  opacity: 0.5;
+}
+
 .task + .task {
   margin-top: 10px;
 }
