@@ -1,12 +1,5 @@
-function createElement(tag, className) {
-  const node = document.createElement(tag)
-
-  if (className) {
-    node.className = className
-  }
-
-  return node
-}
+import { createElement, AutoGrowingTextArea, createElementFromHTML } from './utils.js'
+import { addTaskImage } from './images.js'
 
 
 function Task(task, onCheckbox) {
@@ -34,19 +27,53 @@ function Task(task, onCheckbox) {
 }
 
 
-function TaskList(tasks) {
-  const node = createElement('div', 'tasks')
+function TaskForm(onSubmit) {
+  function onFormSubmit(event) {
+    event.preventDefault()
+    const newTask = {
+      description: text.dataset.replicatedValue,
+      isDone: false
+    }
 
+    onSubmit(newTask)
+  }
+
+  const submitButton = createElement('button', 'task-form-button')
+  submitButton.appendChild(createElementFromHTML(addTaskImage))
+  submitButton.type = 'submit'
+
+  const text = AutoGrowingTextArea('task-form-text', 'New task description...')
+
+  const node = createElement('form', 'task task-form')
+  node.addEventListener('submit', onFormSubmit)
+  node.appendChild(submitButton)
+  node.appendChild(text)
+
+  return node
+}
+
+
+function TaskList(tasks) {
   function updateTasks(newTasks) {
     node.replaceWith(TaskList(newTasks))
   }
 
-  function onTaskCheckbox(task) {
-    task.isDone = !task.isDone
-    newTasks = [].concat(tasks.filter((x => !x.isDone)), tasks.filter((x => x.isDone)))
+  function onTaskFormSubmit(newTask) {
+    const newTasks = tasks.slice()
+    newTasks.push(newTask)
     updateTasks(newTasks)
   }
 
+  function onTaskCheckbox(task) {
+    task.isDone = !task.isDone
+    const newTasks = [].concat(tasks.filter((x => !x.isDone)), tasks.filter((x => x.isDone)))
+    updateTasks(newTasks)
+  }
+
+  const taskForm = TaskForm(onTaskFormSubmit)
+
+  const node = createElement('div', 'tasks')
+  node.appendChild(taskForm)
   tasks.forEach(task => node.appendChild(Task(task, onTaskCheckbox)))
 
   return node

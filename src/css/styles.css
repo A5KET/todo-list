@@ -40,6 +40,29 @@ main {
   color: #9290C3;
 }
 
+.task-form-text {
+  flex: 1;
+  background: inherit;
+  border: none;
+  color: inherit;
+}
+
+.task-form-text:focus {
+  outline: none;
+}
+
+.task-form-button {
+  min-width: 1.8em;
+  min-height: 1.8em;
+  background: inherit;
+  border: none;
+  color: currentColor;
+}
+
+.task-form-button:hover > svg > * {
+  stroke: #9290C3
+}
+
 .task.done {
   opacity: 0.5;
 }

@@ -1,0 +1,21 @@
+.textarea-wrapper {
+  display: grid;
+}
+
+.textarea-wrapper::after {
+  content: attr(data-replicated-value) " ";
+  white-space: pre-wrap;
+  visibility: hidden;
+}
+
+.textarea-wrapper > textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+.textarea-wrapper > textarea,
+.textarea-wrapper::after {
+  padding: 0.5em;
+  font: inherit;
+  grid-area: 1 / 1 / 2 / 2;
+}
