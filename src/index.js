@@ -37,14 +37,14 @@ function Task(task, onCheckbox) {
 function TaskList(tasks) {
   const node = createElement('div', 'tasks')
 
-  function updateList() {
-    node.replaceWith(TaskList(tasks))
+  function updateTasks(newTasks) {
+    node.replaceWith(TaskList(newTasks))
   }
 
   function onTaskCheckbox(task) {
     task.isDone = !task.isDone
-    tasks = [].concat(tasks.filter((x => !x.isDone)), tasks.filter((x => x.isDone)))
-    updateList()
+    newTasks = [].concat(tasks.filter((x => !x.isDone)), tasks.filter((x => x.isDone)))
+    updateTasks(newTasks)
   }
 
   tasks.forEach(task => node.appendChild(Task(task, onTaskCheckbox)))
