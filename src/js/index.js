@@ -31,7 +31,7 @@ function TaskForm(onSubmit) {
   function onFormSubmit(event) {
     event.preventDefault()
     const newTask = {
-      description: text.dataset.replicatedValue,
+      description: text.value,
       isDone: false
     }
 

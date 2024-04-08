@@ -26,6 +26,7 @@ export function AutoGrowingTextArea(className, placeholder) {
 
   textarea.addEventListener('input', (event) => {
     node.dataset.replicatedValue = textarea.value
+    node.value = textarea.value
   })
 
   node.appendChild(textarea)
