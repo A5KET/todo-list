@@ -1,10 +1,14 @@
 import { createElement, AutoGrowingTextArea, createElementFromHTML } from './utils.js'
-import { addTaskImage } from './images.js'
+import { addTaskImage, removeTaskImage } from './images.js'
 
 
-function Task(task, onCheckbox) {
+function Task(task, onCheck, onRemove) {
   function onCheckboxClick(event) {
-    onCheckbox(task)
+    onCheck(task)
+  }
+
+  function onRemoveButtonClick(event) {
+    onRemove(task)
   }
   
   const checkbox = createElement('input', 'task-checkbox')
@@ -14,9 +18,14 @@ function Task(task, onCheckbox) {
   const description = createElement('span', 'task-description')
   description.innerHTML = task.description
 
+  const removeButton = createElement('button', 'task-remove-button')
+  removeButton.appendChild(createElementFromHTML(removeTaskImage))
+  removeButton.addEventListener('click', onRemoveButtonClick)
+
   const node = createElement('div', 'task')
   node.appendChild(checkbox)
   node.appendChild(description)
+  node.appendChild(removeButton)
 
   if (task.isDone) {
     checkbox.checked = true
@@ -42,7 +51,7 @@ function TaskForm(onSubmit) {
     if (event.keyCode === 13 && !event.shiftKey) {
       submitButton.click()
     }
-  }
+  } 
 
   const submitButton = createElement('button', 'task-form-button')
   submitButton.appendChild(createElementFromHTML(addTaskImage))
@@ -71,9 +80,14 @@ function TaskList(tasks) {
     updateTasks(newTasks)
   }
 
-  function onTaskCheckbox(task) {
-    task.isDone = !task.isDone
+  function onTaskCheck(checkedTask) {
+    checkedTask.isDone = !checkedTask.isDone
     const newTasks = [].concat(tasks.filter((x => !x.isDone)), tasks.filter((x => x.isDone)))
+    updateTasks(newTasks)
+  }
+
+  function onTaskRemove(removedTask) {
+    const newTasks = tasks.filter(task => task !== removedTask)
     updateTasks(newTasks)
   }
 
@@ -81,7 +95,7 @@ function TaskList(tasks) {
 
   const node = createElement('div', 'tasks')
   node.appendChild(taskForm)
-  tasks.forEach(task => node.appendChild(Task(task, onTaskCheckbox)))
+  tasks.forEach(task => node.appendChild(Task(task, onTaskCheck, onTaskRemove)))
 
   return node
 }
