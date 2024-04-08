@@ -38,11 +38,18 @@ function TaskForm(onSubmit) {
     onSubmit(newTask)
   }
 
+  function onTextKeypress(event) {
+    if (event.keyCode === 13 && !event.shiftKey) {
+      submitButton.click()
+    }
+  }
+
   const submitButton = createElement('button', 'task-form-button')
   submitButton.appendChild(createElementFromHTML(addTaskImage))
   submitButton.type = 'submit'
 
   const text = AutoGrowingTextArea('task-form-text', 'New task description...')
+  text.addEventListener('keypress', onTextKeypress)
 
   const node = createElement('form', 'task task-form')
   node.addEventListener('submit', onFormSubmit)
