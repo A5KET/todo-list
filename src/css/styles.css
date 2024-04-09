@@ -1,3 +1,10 @@
+:root {
+  --color-first: #9290C3;
+  --color-second: #535C91;
+  --color-third: #1B1A55;
+  --color-fourth: #070F2B;
+}
+
 * {
   list-style: none;
   padding: 0;
@@ -8,7 +15,7 @@
 body {
   width: 100vw;
   display: flex;
-  background: #070F2B;
+  background: var(--color-fourth);
 }
 
 main {
@@ -21,8 +28,8 @@ main {
 
 .header {
   font-size: 60px;
-  color: #9290C3;
-  border-bottom: 5px #535C91 solid;
+  color: var(--color-first);
+  border-bottom: 5px var(--color-second) solid;
   border-radius: 2px;
   margin-bottom: 10px;
 }
@@ -34,10 +41,10 @@ main {
 .task {
   display: flex;
   padding: 5px;
-  border: 3px #373B73 solid;
+  border: 3px var(--color-second) solid;
   border-radius: 10px;
-  background: #1B1A55;
-  color: #9290C3;
+  background: var(--color-third);
+  color: var(--color-first);
 }
 
 .task-form-text {
@@ -60,7 +67,7 @@ main {
 }
 
 .task-form-button:hover > svg > * {
-  stroke: #9290C3
+  stroke: var(--color-first)
 }
 
 .task.done {
@@ -78,7 +85,7 @@ main {
   width: 1.8em;
   min-width: 1.8em;
   height: 1.8em;
-  border: 0.25em solid #373B73;
+  border: 0.25em solid var(--color-second);
   border-radius: 0.15em;
   transform: translateY(-0.075em);
   display: grid;
@@ -86,7 +93,7 @@ main {
 }
 
 .task-checkbox:hover {
-  border-color: #9290C3;
+  border-color: var(--color-first);
 }
 
 .task-checkbox::before {
@@ -95,7 +102,7 @@ main {
   height: 0.9em;
   transform: scale(0);
   transition: 120ms transform ease-in-out;
-  box-shadow: inset 1em 1em #373B73;
+  box-shadow: inset 1em 1em var(--color-third);
 }
 
 .task-checkbox:checked::before {
@@ -110,5 +117,5 @@ main {
 }
 
 .task-remove-button:hover > svg > * {
-  stroke: #9290C3;
+  stroke: var(--color-first);
 }
