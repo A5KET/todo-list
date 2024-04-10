@@ -40,6 +40,7 @@ main {
 
 .task {
   display: flex;
+  flex-direction: column;
   padding: 5px;
   border: 3px var(--color-second) solid;
   border-radius: 10px;
@@ -47,11 +48,19 @@ main {
   color: var(--color-first);
 }
 
+.task-first-row {
+  display: flex;
+}
+
 .task-form-text {
   flex: 1;
   background: inherit;
   border: none;
   color: inherit;
+}
+
+.task-form {
+  flex-direction: row;
 }
 
 .task-form-text:focus {
@@ -119,3 +128,20 @@ main {
 .task-remove-button:hover > svg > * {
   stroke: var(--color-first);
 }
+
+.task-tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.task-tag {
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 500;
+  border: 1px solid currentColor;
+  margin-right: 4px;
+  margin-top: 5px;
+}
+

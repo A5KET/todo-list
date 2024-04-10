@@ -2,6 +2,22 @@ import { createElement, AutoGrowingTextArea, createElementFromHTML } from './uti
 import { addTaskImage, removeTaskImage } from './images.js'
 
 
+function TaskTag(tag) {
+  const node = createElement('div', 'task-tag')
+  node.textContent = tag
+
+  return node
+}
+
+
+function TaskTagList(tags) {
+  const node = createElement('div', 'task-tags')
+  tags.forEach((tag) => node.appendChild(TaskTag(tag)))
+
+  return node
+}
+
+
 function Task(task, onCheck, onRemove) {
   function onCheckboxClick(event) {
     onCheck(task)
@@ -22,10 +38,16 @@ function Task(task, onCheck, onRemove) {
   removeButton.appendChild(createElementFromHTML(removeTaskImage))
   removeButton.addEventListener('click', onRemoveButtonClick)
 
+  const tagList = TaskTagList(task.tags)
+
+  const firstRow = createElement('div', 'task-first-row')
+  firstRow.appendChild(checkbox)
+  firstRow.appendChild(description)
+  firstRow.appendChild(removeButton)
+
   const node = createElement('div', 'task')
-  node.appendChild(checkbox)
-  node.appendChild(description)
-  node.appendChild(removeButton)
+  node.appendChild(firstRow)
+  node.appendChild(tagList)
 
   if (task.isDone) {
     checkbox.checked = true
@@ -105,19 +127,23 @@ function App() {
   const tasks = [
     {
       description: 'Complete the research report on market trends in the tech industry for the upcoming board meeting. Begin by compiling data from the latest industry reports and reputable sources, analyzing key statistics and projections. Break down the information into relevant sections, including market size, growth drivers, competitive analysis, and emerging technologies. Draft an executive summary highlighting the most significant findings and insights.',
-      isDone: false
+      isDone: false,
+      tags: ['tag1', 'tag2', 'tag3']
     },
     {
       description: 'Attend yoga class at 6:00 PM',
-      isDone: false
+      isDone: false,
+      tags: ['tag1', 'tag2', 'tag3']
     },
     {
       description: 'Water the plants in the backyard',
-      isDone: false
+      isDone: false,
+      tags: ['tag1', 'tag2', 'tag3']
     },
     {
       description: 'task to do',
-      isDone: false
+      isDone: false,
+      tags: ['tag1', 'tag2', 'tag3']
     },
   ]
 
