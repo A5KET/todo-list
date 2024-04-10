@@ -88,13 +88,14 @@ main {
 }
 
 .task-checkbox {
+  color: var(--color-second);
   appearance: none;
   margin: 2px 7px 2px 2px;
   font: inherit;
   width: 1.8em;
   min-width: 1.8em;
   height: 1.8em;
-  border: 0.25em solid var(--color-second);
+  border: 0.25em solid currentCOlor;
   border-radius: 0.15em;
   transform: translateY(-0.075em);
   display: grid;
@@ -102,7 +103,7 @@ main {
 }
 
 .task-checkbox:hover {
-  border-color: var(--color-first);
+  color: var(--color-first);
 }
 
 .task-checkbox::before {
@@ -111,8 +112,9 @@ main {
   height: 0.9em;
   transform: scale(0);
   transition: 120ms transform ease-in-out;
-  box-shadow: inset 1em 1em var(--color-third);
+  box-shadow: inset 1em 1em currentColor;
 }
+
 
 .task-checkbox:checked::before {
   transform: scale(1);
