@@ -3,18 +3,20 @@ import { addTaskImage, removeTaskImage } from './images.js'
 
 
 function TaskTag(tag) {
-  const node = createElement('div', 'task-tag')
-  node.textContent = tag
-
-  return node
+  return createElement(
+    'div',
+    { className: 'task-tag' },
+    tag
+  )
 }
 
 
 function TaskTagList(tags) {
-  const node = createElement('div', 'task-tags')
-  tags.forEach((tag) => node.appendChild(TaskTag(tag)))
-
-  return node
+  return createElement(
+    'div',
+    { className: 'task-tags' },
+    ...tags.map(task => TaskTag(task))
+  )
 }
 
 
@@ -27,27 +29,28 @@ function Task(task, onCheck, onRemove) {
     onRemove(task)
   }
   
-  const checkbox = createElement('input', 'task-checkbox')
-  checkbox.type = 'checkbox'
+  const checkbox = createElement('input', { className: 'task-checkbox', type: 'checkbox' })
   checkbox.addEventListener('click', onCheckboxClick)
 
-  const description = createElement('span', 'task-description')
-  description.innerHTML = task.description
-
-  const removeButton = createElement('button', 'task-remove-button')
-  removeButton.appendChild(createElementFromHTML(removeTaskImage))
+  const removeButton = createElement(
+    'button', 
+    { className: 'task-remove-button' },
+    createElementFromHTML(removeTaskImage)
+  )
   removeButton.addEventListener('click', onRemoveButtonClick)
 
-  const tagList = TaskTagList(task.tags)
-
-  const firstRow = createElement('div', 'task-first-row')
-  firstRow.appendChild(checkbox)
-  firstRow.appendChild(description)
-  firstRow.appendChild(removeButton)
-
-  const node = createElement('div', 'task')
-  node.appendChild(firstRow)
-  node.appendChild(tagList)
+  const node = createElement(
+    'div',
+    { className: 'task' },
+    createElement(
+      'div',
+      { className: 'task-first-row' },
+      checkbox,
+      createElement('span', { className: 'task-description' }, task.description),
+      removeButton
+    ),
+    TaskTagList(task.tags)
+  )
 
   if (task.isDone) {
     checkbox.checked = true
@@ -63,7 +66,8 @@ function TaskForm(onSubmit) {
     event.preventDefault()
     const newTask = {
       description: text.value,
-      isDone: false
+      isDone: false,
+      tags: []
     }
 
     onSubmit(newTask)
@@ -75,17 +79,22 @@ function TaskForm(onSubmit) {
     }
   } 
 
-  const submitButton = createElement('button', 'task-form-button')
-  submitButton.appendChild(createElementFromHTML(addTaskImage))
-  submitButton.type = 'submit'
+  const submitButton = createElement(
+    'button',
+    { className: 'task-form-button', type: 'submit' },
+    createElementFromHTML(addTaskImage)
+  )
 
-  const text = AutoGrowingTextArea('task-form-text', 'New task description...')
+  const text = AutoGrowingTextArea({ className: 'task-form-text', placeholder: 'New task description...' })
   text.addEventListener('keypress', onTextKeypress)
 
-  const node = createElement('form', 'task task-form')
+  const node = createElement(
+    'form',
+    { className: 'task task-form' },
+    submitButton,
+    text
+  )
   node.addEventListener('submit', onFormSubmit)
-  node.appendChild(submitButton)
-  node.appendChild(text)
 
   return node
 }
@@ -109,15 +118,15 @@ function TaskList(tasks) {
   }
 
   function onTaskRemove(removedTask) {
-    const newTasks = tasks.filter(task => task !== removedTask)
     updateTasks(newTasks)
   }
 
-  const taskForm = TaskForm(onTaskFormSubmit)
-
-  const node = createElement('div', 'tasks')
-  node.appendChild(taskForm)
-  tasks.forEach(task => node.appendChild(Task(task, onTaskCheck, onTaskRemove)))
+  const node = createElement(
+    'div',
+    { className: 'tasks' },
+    TaskForm(onTaskFormSubmit), 
+    ...tasks.map(task => Task(task, onTaskCheck, onTaskRemove))
+  )
 
   return node
 }
@@ -147,17 +156,12 @@ function App() {
     },
   ]
 
-
-  const header = createElement('h1', 'header')
-  header.innerHTML = 'TODO LIST'
-
-  const taskList = TaskList(tasks)
-  
-  const node = createElement('main')
-  node.appendChild(header)
-  node.appendChild(taskList)
-
-  return node
+  return createElement(
+    'main',
+    { },
+    createElement('h1', { className: 'header' }, 'TODO LIST'), 
+    TaskList(tasks)
+  )
 }
 
 document.body.appendChild(App())
