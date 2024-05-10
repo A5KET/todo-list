@@ -100,6 +100,10 @@ function reconcileChildren(workInProgressFiber, elements) {
       appState.deletions.push(oldFiber)
     }
 
+    if (oldFiber) {
+      oldFiber = oldFiber.sibling
+    }
+
     if (index === 0) {
       workInProgressFiber.child = newFiber
     }
