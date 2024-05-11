@@ -11,6 +11,12 @@ function getOldHook() {
 }
 
 
+function pushHook(hook) {
+  appState.workInProgressFiber.hooks.push(hook)
+  appState.hookIndex++
+}
+
+
 export function useState(initial) {
   const oldHook = getOldHook()
 
@@ -36,10 +42,40 @@ export function useState(initial) {
     appState.deletions = []
   }
 
-  appState.workInProgressFiber.hooks.push(hook)
-  appState.hookIndex++
+  pushHook(hook)
 
   return [hook.state, setState]
 }
 
 
+export function useEffect(callback, dependencies) {
+  const oldHook = getOldHook()
+
+  const hook = {
+    dependencies
+  }
+
+  if (!oldHook) {
+    callback()
+  }
+  else {
+    if (!areDeepEqual(oldHook.dependencies, hook.dependencies)) {
+      callback()
+    }
+  }
+
+  pushHook(hook)
+}
+
+
+export function useRef(initial) {
+  const oldHook = getOldHook()
+
+  const hook = {
+    value: oldHook ? oldHook.value : { current: initial }
+  }
+
+  pushHook(hook)
+
+  return hook.value
+}

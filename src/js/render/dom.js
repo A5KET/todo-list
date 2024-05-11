@@ -60,9 +60,17 @@ function addNewProperties(dom, prevProps, nextProps) {
 }
 
 
+function addRef(dom, prevProps, nextProps) {
+  if (nextProps.ref) {
+    nextProps.ref.current = dom
+  }
+}
+
+
 export function updateDOM(dom, prevProps, nextProps) {
   removeOldOrChangedListeners(dom, prevProps, nextProps)
   removeOldProperies(dom, prevProps, nextProps)
   addNewProperties(dom, prevProps, nextProps)
   addNewListeners(dom, prevProps, nextProps)
+  addRef(dom, prevProps, nextProps)
 }
