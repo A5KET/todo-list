@@ -55,13 +55,11 @@ export function useEffect(callback, dependencies) {
     dependencies
   }
 
-  if (!oldHook) {
+  if (!oldHook || !dependencies) {
     callback()
   }
-  else {
-    if (!areDeepEqual(oldHook.dependencies, hook.dependencies)) {
-      callback()
-    }
+  else if (!areDeepEqual(oldHook.dependencies, hook.dependencies)) {
+    callback()
   }
 
   pushHook(hook)
