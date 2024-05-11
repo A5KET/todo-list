@@ -1,5 +1,5 @@
 .textarea-wrapper {
-  display: grid;
+  display: flex;
 }
 
 .textarea-wrapper::after {
@@ -17,5 +17,4 @@
 .textarea-wrapper::after {
   padding: 0.5em;
   font: inherit;
-  grid-area: 1 / 1 / 2 / 2;
 }
