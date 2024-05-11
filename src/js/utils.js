@@ -31,3 +31,20 @@ export function areDeepEqual(val1, val2) {
 
   return true;
 }
+
+
+export function getObjectFromLocalStorage(key) {
+  try {
+    return JSON.parse(window.localStorage.getItem(key))
+  }
+  catch (error) {
+    console.error(error)
+  }
+
+  return undefined
+}
+
+
+export function saveObjectIntoLocalStorage(key, object) {
+  window.localStorage.setItem(key, JSON.stringify(object))
+}

@@ -1,4 +1,7 @@
-export class LocalTaskRepository {
+import { getObjectFromLocalStorage, saveObjectIntoLocalStorage } from './utils.js'
+
+
+export class InMemoryTaskRepository {
   constructor() {
     this.tasks = [
       {
@@ -34,5 +37,22 @@ export class LocalTaskRepository {
 
   async remove(taskToRemove) {
     this.tasks = this.tasks.filter(task => task !== taskToRemove)
+  }
+}
+
+
+export class LocalStorageTaskRepository extends InMemoryTaskRepository {
+  constructor() {
+    super()
+    this.tasks = getObjectFromLocalStorage('tasks') || []
+  }
+
+  async add(taskToAdd) {
+    super.add(taskToAdd)
+    this.save()
+  }
+
+  save() {
+    saveObjectIntoLocalStorage('tasks', this.tasks)
   }
 }
