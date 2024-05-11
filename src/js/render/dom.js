@@ -12,11 +12,7 @@ export function createDOM(fiber) {
     ? document.createTextNode('')
     : document.createElement(fiber.type)
 
-    Object.keys(fiber.props)
-      .filter(isProperty)
-      .forEach(name => {
-        dom[name] = fiber.props[name]
-      })
+    updateDOM(dom, {}, fiber.props)
 
     return dom
 }
