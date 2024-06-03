@@ -94,31 +94,25 @@ function TaskForm({ onSubmit }) {
 }
 
 
-export function TaskList({ repository }) {
+export function TaskList({ taskRepository }) {
   const [tasks, setTasks] = useState([])
 
   useEffect(() => {
-    updateTasks()
-  })
-
-  function updateTasks() {
-    repository.getAll().then(newTasks => setTasks([].concat(newTasks.filter((x => !x.isDone)), tasks.filter((x => x.isDone)))))
-  }
+    taskRepository.getAll().then(newTasks => setTasks(newTasks))
+  }, [])
 
 
   function onTaskFormSubmit(newTask) {
-    repository.add(newTask)
-    updateTasks()
+    taskRepository.add(newTask).then(newTasks => setTasks(newTasks))
   }
 
   function onTaskCheck(checkedTask) {
     checkedTask.isDone = !checkedTask.isDone
-    updateTasks()
+    taskRepository.update(checkedTask).then(newTasks => setTasks(newTasks))
   }
 
   function onTaskRemove(taskToRemove) {
-    repository.remove(taskToRemove)
-    updateTasks()
+    taskRepository.remove(taskToRemove).then(newTasks => setTasks(newTasks))
   }
 
   return createElement(
