@@ -20,7 +20,7 @@ export function isDefined(value) {
 
 
 export function areDefined(...values) {
-  values.every(isDefined)
+  return values.every(isDefined)
 }
 
 
