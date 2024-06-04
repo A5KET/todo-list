@@ -18,7 +18,7 @@ router.post('/signup', async (req, res) => {
   const user = await req.db.user.add(userData)
   const session = await req.db.session.update(user.id)
 
-  req.status(201).json({ data: session.token })
+  req.status(201).json({ data: { token: session.token } })
 })
 
 
@@ -29,7 +29,7 @@ router.post('/signin', async (req, res) => {
     return res.status(400).json({ error: 'Email and password are required' })
   }
 
-  const user = await req.db.user.get(email.password)
+  const user = await req.db.user.get(email, password)
 
   if (!user) {
     return res.status(401).json({ error: 'Invalid username or password' })
@@ -37,5 +37,12 @@ router.post('/signin', async (req, res) => {
 
   const session = await req.db.session.update(user.id)
 
-  res.json({ data: session.token })
+  res.json({
+    data: {
+      user: {
+        username: user.name
+      },
+      token: session.token
+    }
+  })
 })
