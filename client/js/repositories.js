@@ -5,7 +5,7 @@ import { getRequest, postRequest, deleteRequest, putRequest } from './requests.j
 export class LocalStorageTaskRepository {
   constructor() {
     /** @type {Object[]} */
-    this.tasks = getObjectFromLocalStorage('tasks') || []
+    this._tasks = getObjectFromLocalStorage('tasks') || []
   }
 
   async getAll() {
@@ -16,33 +16,33 @@ export class LocalStorageTaskRepository {
 
   async add(taskToAdd) {
     taskToAdd.id = this.getNewId()
-    this.tasks.push(taskToAdd)
-    this.save()
+    this.tasks = [...this.tasks, taskToAdd]
+
     return this.getAll()
   }
 
   async remove(taskToRemove) {
     this.tasks = this.tasks.filter(task => task !== taskToRemove)
-    this.save()
+
     return this.getAll()
   }
 
   async update(taskToUpdate) {
-    for (let i = 0; i < this.tasks.length; i++) {
-      if (this.tasks[i].id == taskToUpdate.id) {
-        this.tasks[i] = taskToUpdate
+    const newTasks = this.tasks.slice()
+
+    for (let i = 0; i < newTasks.length; i++) {
+      if (newTasks[i].id == taskToUpdate.id) {
+        newTasks[i] = taskToUpdate
       }
     }
+    this.tasks = newTasks
 
-    this.save()
     return this.getAll()
   }
 
   async remove(taskToRemove) {
     this.tasks = this.tasks.filter(task => task.id != taskToRemove.id)
 
-
-    this.save()
     return this.getAll()
   }
 
@@ -50,9 +50,15 @@ export class LocalStorageTaskRepository {
     return Math.max(...this.tasks.map(task => task.id)) + 1
   }
 
-  save() {
-    saveObjectIntoLocalStorage('tasks', this.tasks)
+
+  get tasks() {
+    return this._tasks
   }
+
+  set tasks(newTasks) {
+    saveObjectIntoLocalStorage('tasks', newTasks)
+    this._tasks = newTasks  
+  } 
 }
 
 
