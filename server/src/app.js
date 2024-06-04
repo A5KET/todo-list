@@ -8,13 +8,14 @@ import { authMiddleware } from './middlewares.js'
 export function createApp(database) {
   const app = express()
 
-  app.use('/', authRouter)
-  app.use('/', authMiddleware, taskRouter)
-
   app.use((req, res, next) => {
     req.db = database
     next()
   })
+
+  app.use(express.json())
+  app.use('/', authRouter)
+  app.use('/', authMiddleware, taskRouter)
 
   return app
 }
