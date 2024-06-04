@@ -38,11 +38,11 @@ export class Database {
   }
 
   executeSelectOne(query, values) {
-    this.client.executeSelectMany(query, values).then(result => result[0])
+    return this.executeSelectMany(query, values).then(result => result[0])
   }
 
   executeSelectMany(query, values) {
-    this.client.query(query, values).then(result => result.rows).then(rows => this.handlerResultRows(rows))
+    return this.client.query(query, values).then(result => result.rows).then(rows => this.handlerResultRows(rows))
   }
 
   handlerResultRows(rows) {
