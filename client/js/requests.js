@@ -45,20 +45,24 @@ export class APIClient {
     this.defaultHeaders = defaultHeaders
   }
 
+  request(url, method, body, headers) {
+    return JSONRequest(this.createUrl(url), method, body, this.getHeaders(headers))
+  }
+
   get(url, headers={}) {
-    return JSONRequest(this.createUrl(url), HTTPMethod.Get, undefined, this.getHeaders(headers))
+    return this.request(url, HTTPMethod.Get, undefined, headers)
   }
 
   post(url, body={}, headers={}) {
-    return JSONRequest(this.createUrl(url), HTTPMethod.Post, body, headers)
+    return this.request(url, HTTPMethod.Post, body, headers)
   }
 
   put(url, body={}, headers={}) {
-    return JSONRequest(this.createUrl(url), HTTPMethod.Put, body, headers)
+    return this.request(url, HTTPMethod.Put, body, headers)
   }
 
   delete(url, body={}, headers={}) {
-    return JSONRequest(this.createUrl(url), HTTPMethod.Delete, body, headers)
+    return this.request(url, HTTPMethod.Delete, body, headers)
   }
 
   getHeaders(headers) {
