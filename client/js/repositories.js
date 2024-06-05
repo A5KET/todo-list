@@ -4,6 +4,7 @@ import { APIClient } from './requests.js'
 
 export class LocalStorageTaskRepository {
   constructor() {
+    this.type = 'local'
     /** @type {Object[]} */
     this._tasks = getObjectFromLocalStorage('tasks') || []
   }
@@ -68,26 +69,29 @@ export class RemoteTaskRepository {
    * @param {APIClient} api 
    */
   constructor(api) {
+    this.type = 'remote'
     this.api = api
   }
 
   async getAll() {
-    return this.api.get('/tasks')
-  }
-
-  async get(taskId) {
-    return this.api.get(`/tasks/${taskId}`)
+    return this.api.get('/tasks').then(tasks => tasks.sort((a, b) => a.isDone - b.isDone))
   }
 
   async add(task) {
-    return this.api.post('/tasks', task)
+    await this.api.post('/tasks', task)
+
+    return this.getAll()
   }
 
   async remove(task) {
-    return this.api.delete(`/tasks/${task.id}`)
+    await this.api.delete(`/tasks/${task.id}`)
+
+    return this.getAll()
   }
 
   async update(task) {
-    return this.api.put(`/tasks/${task.id}`, task)
+    await this.api.put(`/tasks/${task.id}`, task)
+
+    return this.getAll()
   }
 }

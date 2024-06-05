@@ -49,7 +49,7 @@ export function App({ taskRepositoryFactory, userInfo }) {
   const taskRepository = taskRepositoryFactory(user)
 
   useEffect(() => {
-    userInfo.get().then(info => setUser(info))
+    userInfo.get().then(user => setUser(user))
   }, [])
 
   function onSignInFormLinkClick() {
@@ -68,19 +68,22 @@ export function App({ taskRepositoryFactory, userInfo }) {
     userInfo.signOut().then(user => setUser(user))
   }
 
+  function handleSignRequest(request) {
+    request.then(user => {
+      setUser(user)
+      onFormClose()
+    })
+    .catch(error => {
+      setCurrentFormError(error.message)
+    })
+  }
+
   function onSignInSubmit(data) {
-    userInfo.signIn(data)
-      .then(user => {
-        setUser(user)
-        onFormClose()
-      })
-      .catch(error => setCurrentFormError(error.message))
+    handleSignRequest(userInfo.signIn(data))
   }
 
   function onSignUpSubmit(data) {
-    userInfo.signUp(data)
-      .then(user => setUser(user))
-      .catch(error => setCurrentFormError(error.message))
+    handleSignRequest(userInfo.signUp(data))
   }
 
   let form = undefined

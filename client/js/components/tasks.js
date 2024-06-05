@@ -52,7 +52,7 @@ function Task({ task, onCheck, onRemove }) {
           )
         ]
       ),
-      createElement(TaskTagList, { tags: task.tags })
+      createElement(TaskTagList, { tags: task.tags || [] })
     ]
   )
 }
@@ -99,7 +99,7 @@ export function TaskList({ taskRepository }) {
 
   useEffect(() => {
     taskRepository.getAll().then(newTasks => setTasks(newTasks))
-  }, [taskRepository])
+  }, taskRepository.type)
 
 
   function onTaskFormSubmit(newTask) {

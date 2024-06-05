@@ -41,7 +41,7 @@ function FormError({ error }) {
 
 
 export function SignInForm({ onSubmit, onClose, onLinkClick, error }) {
-  function onFormClose(event) {
+  function onFormClose() {
     onClose()
   }
 

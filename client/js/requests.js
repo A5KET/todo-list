@@ -23,13 +23,24 @@ export class ResponseError extends Error {
  * @returns 
  */
 export async function JSONRequest(url, method, body, headers={}) {
-  const response = await fetch(url, {
+  let response = await fetch(url, {
     method: method,
     headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
     body: body ? JSON.stringify(body) : undefined
   })
-  .then(response => response.json())
-  .catch(error => console.log(error))
+
+  const text = await response.text()
+
+  if (!text) {
+    return undefined
+  }
+
+  try {
+    response = JSON.parse(text)
+  } catch (error) {
+    console.log('parse error', text)
+    return undefined
+  }
 
   if (response.error) {
     throw new ResponseError(response.error)
