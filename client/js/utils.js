@@ -35,7 +35,9 @@ export function areDeepEqual(val1, val2) {
 
 export function getObjectFromLocalStorage(key) {
   try {
-    return JSON.parse(window.localStorage.getItem(key))
+    const value = getValueFromLocalStorage(key)
+    
+    return JSON.parse(value)
   }
   catch (error) {
     console.error(error)
@@ -46,5 +48,25 @@ export function getObjectFromLocalStorage(key) {
 
 
 export function saveObjectIntoLocalStorage(key, object) {
-  window.localStorage.setItem(key, JSON.stringify(object))
+  saveValueIntoLocalStorage(key, JSON.stringify(object))
+}
+
+
+export function saveValueIntoLocalStorage(key, value) {
+  window.localStorage.setItem(key, value)
+}
+
+
+export function getValueFromLocalStorage(key) {
+  return window.localStorage.getItem(key)
+}
+
+
+export function removeValueFromLocalStorage(key) {
+  window.localStorage.removeItem(key)
+}
+
+
+export function getFormData(form) {
+  return Object.fromEntries(new FormData(form))
 }

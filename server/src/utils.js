@@ -7,7 +7,7 @@ export function fromSnakeCaseToCamelCase(str) {
 
 
 export function renameObjectKey(object, oldKey, newKey) {
-  if (oldName !== newName) {
+  if (oldKey !== newKey) {
     Object.defineProperty(object, newKey, Object.getOwnPropertyDescriptor(object, oldKey))
     delete object[oldKey]
   }
@@ -25,13 +25,13 @@ export function areDefined(...values) {
 
 
 export function renameObjectPropertiesFromSnakeCaseToCamelCase(object) {
-  for (const key in row) {
+  for (const key in object) {
     const newKey = fromSnakeCaseToCamelCase(key)
-    renameObjectKey(row, key, newKey)
+    renameObjectKey(object, key, newKey)
   }
 }
 
 
 export function generateToken() { // #TODO
-  return 'boba'
+  return crypto.randomBytes(64).toString('hex')
 }

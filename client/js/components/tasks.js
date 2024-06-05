@@ -99,7 +99,7 @@ export function TaskList({ taskRepository }) {
 
   useEffect(() => {
     taskRepository.getAll().then(newTasks => setTasks(newTasks))
-  }, [])
+  }, [taskRepository])
 
 
   function onTaskFormSubmit(newTask) {

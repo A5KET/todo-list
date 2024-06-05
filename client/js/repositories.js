@@ -1,5 +1,5 @@
 import { getObjectFromLocalStorage, saveObjectIntoLocalStorage } from './utils.js'
-import { getRequest, postRequest, deleteRequest, putRequest } from './requests.js'
+import { APIClient } from './requests.js'
 
 
 export class LocalStorageTaskRepository {
@@ -63,23 +63,31 @@ export class LocalStorageTaskRepository {
 
 
 export class RemoteTaskRepository {
+  /**
+   * 
+   * @param {APIClient} api 
+   */
+  constructor(api) {
+    this.api = api
+  }
+
   async getAll() {
-    return getRequest('/api/tasks')
+    return this.api.get('/tasks')
   }
 
   async get(taskId) {
-    return getRequest(`/api/tasks/${taskId}`)
+    return this.api.get(`/tasks/${taskId}`)
   }
 
   async add(task) {
-    return postRequest('/api/tasks', task)
+    return this.api.post('/tasks', task)
   }
 
   async remove(task) {
-    return deleteRequest(`/api/tasks/${task.id}`)
+    return this.api.delete(`/tasks/${task.id}`)
   }
 
   async update(task) {
-    return putRequest(`/api/tasks/${task.id}`, task)
+    return this.api.put(`/tasks/${task.id}`, task)
   }
 }

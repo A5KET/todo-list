@@ -21,7 +21,7 @@ export class SessionRepository extends Repository {
   async update(userId) {
     const token = generateToken()
 
-    return this.db.addSession(userId, token).then(() => token)
+    return this.db.addSession(userId, token)
   }
 }
 
@@ -44,8 +44,9 @@ export class UserRepository extends Repository {
 
   async add(user) {
     user.password = this.hashEncryptor(user.password)
+    await this.db.addUser(user)
 
-    return this.db.addUser(user)
+    return this.db.getUser(user.email, user.password)
   }
 }
 

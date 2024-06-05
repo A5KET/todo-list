@@ -16,21 +16,21 @@ export class Database {
     return this.client.query(`
     CREATE TABLE IF NOT EXISTS "user" (
       id SERIAL PRIMARY KEY,
-      username VARCHAR(256) NOT NULL,
+      username VARCHAR(256) NOT NULL UNIQUE,
       email VARCHAR(256) NOT NULL UNIQUE,
       password VARCHAR(128) NOT NULL
     );
     
     CREATE TABLE IF NOT EXISTS task (
       id SERIAL PRIMARY KEY,
-      user_id SERIAL REFERENCES "user" (id),
+      user_id SERIAL NOT NULL REFERENCES "user" (id),
       text VARCHAR(2048) NOT NULL,
       is_done BOOLEAN NOT NULL DEFAULT FALSE
     );
 
     CREATE TABLE IF NOT EXISTS session (
       id SERIAL PRIMARY KEY,
-      user_id INTEGER REFERENCES "user" (id) UNIQUE,
+      user_id INTEGER NOT NULL REFERENCES "user" (id) UNIQUE,
       token VARCHAR(255) UNIQUE NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
@@ -42,13 +42,14 @@ export class Database {
   }
 
   executeSelectMany(query, values) {
-    return this.client.query(query, values).then(result => result.rows).then(rows => this.handlerResultRows(rows))
+    return this.client.query(query, values)
+      .then(result => this.handleResultRow(result.rows))
   }
 
-  handlerResultRows(rows) {
-    rows.forEach(renameObjectPropertiesFromSnakeCaseToCamelCase)
+  handleResultRow(row) {
+    renameObjectPropertiesFromSnakeCaseToCamelCase(row)
 
-    return rows
+    return row
   }
 
   getAll(table) {
@@ -60,7 +61,7 @@ export class Database {
 
   getUser(email, password) { 
     return this.executeSelectOne(`
-      SELECT (id, username, email)
+      SELECT *
       FROM "user"
       WHERE email = $1 AND password = $2
     `, [email, password])
@@ -71,7 +72,7 @@ export class Database {
       INSERT INTO "user" (username, email, password)
       VALUES ($1, $2, $3)
       RETURNING (id, username, email)
-    `, [user.username, user.email, password])
+    `, [user.username, user.email, user.password])
   }
 
   getTasks(userId) {
@@ -84,7 +85,7 @@ export class Database {
 
   getUserByToken(token) {
     return this.executeSelectOne(`
-      SELECT (id, username, email)
+      SELECT *
       FROM "user"
       JOIN session ON session.token = $1
     `, [token])

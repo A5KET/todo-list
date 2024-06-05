@@ -7,7 +7,12 @@ export function AutoGrowingTextArea(props) {
 
   return createElement(
     'div',
-    Object.assign({}, props, { value, onInput: (event) => setValue(event.target.value), className: 'textarea-wrapper ' + (props.className || ''), onKeypress: undefined }),
+    Object.assign(
+      props, 
+      { 
+        value, onInput: (event) => setValue(event.target.value), 
+        className: 'textarea-wrapper ' + (props.className || ''), 
+        onKeypress: undefined }),
     [
       createElement('textarea', props)
     ]

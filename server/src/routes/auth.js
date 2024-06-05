@@ -18,7 +18,7 @@ router.post('/signup', async (req, res) => {
   const user = await req.db.user.add(userData)
   const session = await req.db.session.update(user.id)
 
-  req.status(201).json({ data: { token: session.token } })
+  req.status(201).json({ data: { token: session.token, user: { username: user.username } } })
 })
 
 
@@ -37,12 +37,5 @@ router.post('/signin', async (req, res) => {
 
   const session = await req.db.session.update(user.id)
 
-  res.json({
-    data: {
-      user: {
-        username: user.name
-      },
-      token: session.token
-    }
-  })
+  res.json({ data: { token: session.token, user: { username: user.username } } })
 })

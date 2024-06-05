@@ -12,25 +12,66 @@
   box-sizing: border-box;
 }
 
+.invisible {
+  visibility: hidden;
+  height: 0;
+  width: 0;
+}
+
 body {
   width: 100vw;
   display: flex;
   background: var(--color-fourth);
+  font-family: monospace;
+}
+
+.root {
+  margin: 0 auto;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: var(--color-first);
+}
+
+.auth {
+  display: flex;
+  justify-content: end;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 5px 0;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+}
+
+.sign-link {
+  color: var(--color-second);
+}
+
+.sign-link:hover {
+  cursor: pointer;
 }
 
 main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 auto;
-  font-family: monospace;
 }
 
-.header {
+.title {
+  width: fit-content;
   font-size: 60px;
   color: var(--color-first);
   border-bottom: 5px var(--color-second) solid;
   border-radius: 2px;
+  text-align: center;
+  margin: 0 auto;
   margin-bottom: 10px;
 }
 
@@ -147,3 +188,95 @@ main {
   margin-top: 5px;
 }
 
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(3px);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sign-form {
+  position: relative;
+  margin: auto;
+  background: var(--color-third);
+  border: 1px solid var(--color-first);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 15px;
+  gap: 15px;
+  margin-top: 12%;
+}
+
+.sign-form .heading {
+  font-size: 40px;
+  color: var(--color-first);
+  text-transform: uppercase;
+}
+
+.form-field {
+  background: #414082;
+  color: var(--color-first);
+  font-size: 16px;
+  padding: 5px;
+  display: flex;
+  border: 1px solid var(--color-first);
+  border-radius: 4px;
+}
+
+.form-field input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: inherit;
+  font-weight: 500;
+}
+
+.sign-form button {
+  width: fit-content;
+  background: var(--color-first);
+  color: var(--color-fourth);
+  border: none;
+  border-radius: 3px;
+  padding: 5px 15px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.sign-form button:hover {
+  cursor: pointer;
+}
+
+.sign-form .link {
+  color: var(--color-second);
+  font-size: 10px;
+}
+
+.sign-form .link a:hover {
+  cursor: pointer;
+}
+ 
+.sign-form .link a {
+  color: var(--color-first);
+}
+
+.form-error {
+  background: var(--color-fourth);
+  color: var(--color-first);
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 5px;
+  width: 0;
+  min-width: 100%;
+}
