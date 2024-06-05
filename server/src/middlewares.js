@@ -17,7 +17,7 @@ export async function authMiddleware(req, res, next) {
     return res.status(401).json({ error: 'Authorization denied' })
   }
 
-  const user = req.db.user.getByToken(token)
+  const user = await req.db.user.getByToken(token)
 
   if (!user) {
     return res.status(401).json({ error: 'Token is not valid' })

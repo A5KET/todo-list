@@ -56,11 +56,19 @@ export class TaskRepository extends Repository {
     return this.db.getTasks(userId)
   }
 
-  async add(task) {
+  async add(userId, task) {
+    task.userId = userId
+
     return this.db.addTask(task)
   }
 
-  async update(task) {
+  async update(userId, task) {
+    task.userId = userId
+
     return this.db.updateTask(task)
+  }
+
+  async remove(userId, taskId) {
+    return this.db.removeTask({ id: taskId, userId })
   }
 }

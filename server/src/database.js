@@ -24,7 +24,7 @@ export class Database {
     CREATE TABLE IF NOT EXISTS task (
       id SERIAL PRIMARY KEY,
       user_id SERIAL NOT NULL REFERENCES "user" (id),
-      text VARCHAR(2048) NOT NULL,
+      description VARCHAR(2048) NOT NULL,
       is_done BOOLEAN NOT NULL DEFAULT FALSE
     );
 
@@ -43,7 +43,7 @@ export class Database {
 
   executeSelectMany(query, values) {
     return this.client.query(query, values)
-      .then(result => this.handleResultRow(result.rows))
+      .then(result => result.rows.map(this.handleResultRow))
   }
 
   handleResultRow(row) {
@@ -85,7 +85,7 @@ export class Database {
 
   getUserByToken(token) {
     return this.executeSelectOne(`
-      SELECT *
+      SELECT "user".*
       FROM "user"
       JOIN session ON session.token = $1
     `, [token])
@@ -110,24 +110,24 @@ export class Database {
   }
 
   addTask(task) {
-    return this.query(`
-      INSERT INTO task (user_id, text, is_done)
+    return this.client.query(`
+      INSERT INTO task (user_id, description, is_done)
       VALUES ($1, $2, $3)
-    `, [task.userId, task.text, task.isDone])
+    `, [task.userId, task.description, task.isDone])
   }
 
   updateTask(task) {
-    return this.query(`
+    return this.client.query(`
       UPDATE task
-      SET text = $1, is_done = $2
-      WHERE task.id = $3
-    `, [task.text, task.isDone, task.id])
+      SET description = $1, is_done = $2
+      WHERE task.id = $3 AND user_id = $4
+    `, [task.description, task.isDone, task.id, task.userId])
   }
 
   removeTask(task) {
-    return this.query(`
+    return this.client.query(`
       DELETE FROM task
-      WHERE task.id = $1
-    `, [task.id])
+      WHERE task.id = $1 AND user_id = $2
+    `, [task.id, task.userId])
   }
 }

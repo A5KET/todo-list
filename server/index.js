@@ -14,7 +14,7 @@ async function start() {
   const repositories = {
     user: new UserRepository(database, SHA256HexEncryptor),
     session: new SessionRepository(database),
-    tasks: new TaskRepository(database)
+    task: new TaskRepository(database)
   }
 
   const app = createApp(repositories)

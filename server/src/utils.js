@@ -29,6 +29,8 @@ export function renameObjectPropertiesFromSnakeCaseToCamelCase(object) {
     const newKey = fromSnakeCaseToCamelCase(key)
     renameObjectKey(object, key, newKey)
   }
+
+  return object
 }
 
 
