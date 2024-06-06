@@ -74,7 +74,7 @@ function TaskForm({ onSubmit }) {
   }
 
   function onTextKeypress(event) {
-    if (event.keyCode === 13 && !event.shiftKey) {
+    if (event.keyCode === 13 && !event.shiftKey && event.target == this) {
       event.preventDefault()
       formRef.current.requestSubmit()
     }
