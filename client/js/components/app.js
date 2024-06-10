@@ -61,6 +61,7 @@ export function App({ taskRepositoryFactory, userInfo }) {
   }
 
   function onFormClose() {
+    setCurrentFormError(undefined)
     setCurrentForm(undefined)
   }
 
