@@ -28,7 +28,7 @@ function TaskTagList({ tags }) {
 
 function Task({ task, onCheck, onRemove }) {
   function onCheckboxClick(event) {
-    event.target.checked = false
+    event.preventDefault()
     onCheck(task)
   }
 
