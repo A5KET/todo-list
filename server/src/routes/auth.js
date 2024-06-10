@@ -18,7 +18,7 @@ router.post('/signup', async (req, res) => {
   const user = await req.db.user.add(userData)
   const session = await req.db.session.update(user.id)
 
-  req.status(201).json({ data: { token: session.token, user: { username: user.username } } })
+  res.status(201).json({ data: { token: session.token, user: { username: user.username } } })
 })
 
 
@@ -32,7 +32,7 @@ router.post('/signin', async (req, res) => {
   const user = await req.db.user.get(email, password)
 
   if (!user) {
-    return res.status(401).json({ error: 'Invalid username or password' })
+    return res.status(401).json({ error: 'Invalid email or password' })
   }
 
   const session = await req.db.session.update(user.id)

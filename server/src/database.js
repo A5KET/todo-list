@@ -37,11 +37,11 @@ export class Database {
     `)
   }
 
-  executeSelectOne(query, values) {
-    return this.executeSelectMany(query, values).then(result => result[0])
+  executeOne(query, values) {
+    return this.executeMany(query, values).then(result => result[0])
   }
 
-  executeSelectMany(query, values) {
+  executeMany(query, values) {
     return this.client.query(query, values)
       .then(result => result.rows.map(this.handleResultRow))
   }
@@ -53,14 +53,14 @@ export class Database {
   }
 
   getAll(table) {
-    return this.executeSelectMany(`
+    return this.executeMany(`
       SELECT *
       FROM "${table}"
     `)
   }
 
   getUser(email, password) { 
-    return this.executeSelectOne(`
+    return this.executeOne(`
       SELECT *
       FROM "user"
       WHERE email = $1 AND password = $2
@@ -68,7 +68,7 @@ export class Database {
   }
 
   addUser(user) {
-    return this.executeSelectOne(`
+    return this.executeOne(`
       INSERT INTO "user" (username, email, password)
       VALUES ($1, $2, $3)
       RETURNING (id, username, email)
@@ -76,7 +76,7 @@ export class Database {
   }
 
   getTasks(userId) {
-    return this.executeSelectMany(`
+    return this.executeMany(`
       SELECT *
       FROM "task"
       WHERE user_id = $1
@@ -84,7 +84,7 @@ export class Database {
   }
 
   getUserByToken(token) {
-    return this.executeSelectOne(`
+    return this.executeOne(`
       SELECT "user".*
       FROM "user"
       JOIN session ON session.token = $1
@@ -92,7 +92,7 @@ export class Database {
   }
 
   getSessionByToken(token) {
-    return this.executeSelectOne(`
+    return this.executeOne(`
       SELECT *
       FROM session
       WHERE session.token = $1
@@ -100,7 +100,7 @@ export class Database {
   }
 
   addSession(userId, token) {
-    return this.executeSelectOne(`
+    return this.executeOne(`
       INSERT INTO session (user_id, token)
       VALUES ($1, $2)
       ON CONFLICT (user_id)
