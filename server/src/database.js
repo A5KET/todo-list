@@ -23,14 +23,14 @@ export class Database {
     
     CREATE TABLE IF NOT EXISTS task (
       id SERIAL PRIMARY KEY,
-      user_id SERIAL NOT NULL REFERENCES "user" (id),
+      user_id SERIAL NOT NULL REFERENCES "user" (id) ON DELETE CASCADE,
       description VARCHAR(2048) NOT NULL,
       is_done BOOLEAN NOT NULL DEFAULT FALSE
     );
 
     CREATE TABLE IF NOT EXISTS session (
       id SERIAL PRIMARY KEY,
-      user_id INTEGER NOT NULL REFERENCES "user" (id) UNIQUE,
+      user_id INTEGER NOT NULL REFERENCES "user" (id) ON DELETE CASCADE UNIQUE,
       token VARCHAR(255) UNIQUE NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
