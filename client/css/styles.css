@@ -93,7 +93,7 @@ main {
   display: flex;
 }
 
-.task-form-text {
+.task-description {
   flex: 1;
   background: inherit;
   border: none;
@@ -104,7 +104,7 @@ main {
   flex-direction: row;
 }
 
-.task-form-text:focus {
+.task-description:focus {
   outline: none;
 }
 
