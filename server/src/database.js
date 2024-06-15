@@ -18,14 +18,16 @@ export class Database {
       id SERIAL PRIMARY KEY,
       username VARCHAR(256) NOT NULL UNIQUE,
       email VARCHAR(256) NOT NULL UNIQUE,
-      password VARCHAR(128) NOT NULL
+      password VARCHAR(128) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     
     CREATE TABLE IF NOT EXISTS task (
       id SERIAL PRIMARY KEY,
       user_id SERIAL NOT NULL REFERENCES "user" (id) ON DELETE CASCADE,
       description VARCHAR(2048) NOT NULL,
-      is_done BOOLEAN NOT NULL DEFAULT FALSE
+      is_done BOOLEAN NOT NULL DEFAULT FALSE,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS session (

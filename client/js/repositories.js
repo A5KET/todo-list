@@ -1,4 +1,4 @@
-import { getObjectFromLocalStorage, saveObjectIntoLocalStorage } from './utils.js'
+import { multiKeyComparator, getObjectFromLocalStorage, saveObjectIntoLocalStorage } from './utils.js'
 import { APIClient } from './requests.js'
 
 
@@ -10,13 +10,14 @@ export class LocalStorageTaskRepository {
   }
 
   async getAll() {
-    this.tasks.sort((a, b) => a.isDone - b.isDone)
+    this.tasks.sort(multiKeyComparator(['isDone', 'createdAt']))
 
     return this.tasks
   }
 
   async add(taskToAdd) {
     taskToAdd.id = this.getNewId()
+    taskToAdd.createdAt = new Date()
     this.tasks = [...this.tasks, taskToAdd]
 
     return this.getAll()
@@ -74,7 +75,7 @@ export class RemoteTaskRepository {
   }
 
   async getAll() {
-    return this.api.get('/tasks').then(tasks => tasks.sort((a, b) => a.isDone - b.isDone))
+    return this.api.get('/tasks').then(tasks => tasks.sort(multiKeyComparator(['isDone', 'createdAt'])))
   }
 
   async add(task) {

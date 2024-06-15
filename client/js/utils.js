@@ -70,3 +70,18 @@ export function removeValueFromLocalStorage(key) {
 export function getFormData(form) {
   return Object.fromEntries(new FormData(form))
 }
+
+
+export function multiKeyComparator(keys=[]) {
+  return function(a, b) {
+    for (const key of keys) {
+      const comparison = a[key] - b[key]
+
+      if (comparison != 0) {
+        return comparison
+      }
+    }
+
+    return 0
+  }
+}
