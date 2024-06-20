@@ -48,6 +48,14 @@ export class UserRepository extends Repository {
 
     return this.db.getUser(user.email, user.password)
   }
+
+  async isUsernameAvailable(username) {
+    return this.db.checkIfUsernameInUse(username).then(result => !result)
+  }
+
+  async isEmailAvailable(email) {
+    return this.db.checkIfEmailInUse(email).then(result => !result)
+  }
 }
 
 

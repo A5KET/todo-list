@@ -48,6 +48,10 @@ export class Database {
       .then(result => result.rows.map(this.handleResultRow))
   }
 
+  executeExists(query, values) {
+    return this.executeOne(query, values).then(result => result.exists)
+  }
+
   handleResultRow(row) {
     renameObjectPropertiesFromSnakeCaseToCamelCase(row)
 
@@ -61,7 +65,7 @@ export class Database {
     `)
   }
 
-  getUser(email, password) { 
+  getUser(email, password) {
     return this.executeOne(`
       SELECT *
       FROM "user"
@@ -127,9 +131,21 @@ export class Database {
   }
 
   removeTask(task) {
-    return this.client.query(`
+    return this.executeOne(`
       DELETE FROM task
       WHERE task.id = $1 AND user_id = $2
     `, [task.id, task.userId])
+  }
+
+  checkIfEmailInUse(email) {
+    return this.executeExists(`
+      SELECT EXISTS (SELECT 1 FROM "user" WHERE email = $1)
+    `, [email])
+  }
+
+  checkIfUsernameInUse(username) {
+    return this.executeExists(`
+        SELECT EXISTS (SELECT 1 FROM "user" WHERE username = $1)
+      `, [username])
   }
 }

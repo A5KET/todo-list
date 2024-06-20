@@ -7,6 +7,7 @@ export const router = express.Router()
 
 
 router.post('/signup', async (req, res) => {
+  const userRepository = req.db.user
   const { email, username, password } = req.body
 
   if (!areDefined(email, username, password)) {
@@ -15,7 +16,15 @@ router.post('/signup', async (req, res) => {
 
   const userData = { email, username, password }
 
-  const user = await req.db.user.add(userData)
+  if (!(await userRepository.isEmailAvailable(email))) {
+    return res.status(422).json({ error: 'Email is already taken' })
+  }
+
+  if (!(await userRepository.isUsernameAvailable(username))) {
+    return res.status(422).json({ error: 'Username is already taken' })
+  }
+
+  const user = await userRepository.add(userData)
   const session = await req.db.session.update(user.id)
 
   res.status(201).json({ data: { token: session.token, user: { username: user.username } } })
