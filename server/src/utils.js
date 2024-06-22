@@ -37,3 +37,8 @@ export function renameObjectPropertiesFromSnakeCaseToCamelCase(object) {
 export function generateToken() { 
   return crypto.randomBytes(64).toString('hex')
 }
+
+
+export function getAnyObjectValue(object) {
+  return Object.values(object)[0]
+}

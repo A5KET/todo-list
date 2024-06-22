@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { areDefined } from '../utils.js'
+import { areDefined, getAnyObjectValue } from '../utils.js'
 
 
 export const router = express.Router()
@@ -22,6 +22,12 @@ router.post('/signup', async (req, res) => {
 
   if (!(await userRepository.isUsernameAvailable(username))) {
     return res.status(422).json({ error: 'Username is already taken' })
+  }
+
+  const validationErrors = req.validation.validateUser(userData)
+
+  if (validationErrors) {
+    return res.status(422).json({ error: getAnyObjectValue(validationErrors) })
   }
 
   const user = await userRepository.add(userData)
