@@ -17,6 +17,11 @@ function pushHook(hook) {
 }
 
 
+/**
+ * 
+ * @param {any} initial 
+ * @returns {[any, Function]}
+ */
 export function useState(initial) {
   const oldHook = getOldHook()
 
@@ -48,6 +53,11 @@ export function useState(initial) {
 }
 
 
+/**
+ * 
+ * @param {Function} callback 
+ * @param {any} dependencies 
+ */
 export function useEffect(callback, dependencies) {
   const oldHook = getOldHook()
 
@@ -66,6 +76,11 @@ export function useEffect(callback, dependencies) {
 }
 
 
+/**
+ * 
+ * @param {any} initial 
+ * @returns {{ current: any }}
+ */
 export function useRef(initial) {
   const oldHook = getOldHook()
 
