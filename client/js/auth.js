@@ -1,4 +1,4 @@
-import { getObjectFromLocalStorage, removeValueFromLocalStorage, saveObjectIntoLocalStorage } from './utils.js'
+import { getObjectFromLocalStorage, removeValueFromLocalStorage, saveObjectIntoLocalStorage } from './localstorage.js'
 
 
 export class ValidationError extends Error {

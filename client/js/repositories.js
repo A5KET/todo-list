@@ -1,5 +1,6 @@
-import { multiKeyComparator, getObjectFromLocalStorage, saveObjectIntoLocalStorage } from './utils.js'
+import { multiKeyComparator } from './utils.js'
 import { APIClient } from './requests.js'
+import { getObjectFromLocalStorage, saveObjectIntoLocalStorage } from './localstorage.js'
 
 
 export class LocalStorageTaskRepository {
