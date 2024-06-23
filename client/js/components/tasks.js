@@ -2,7 +2,7 @@ import { removeTaskImage, addTaskImage } from '../images.js'
 import { createElement } from '../render/elements.js'
 import { AutoGrowingTextArea } from './textarea.js'
 import { useState, useEffect, useRef } from '../render/hooks.js'
-import { onEnterKeyPress } from '../listeners.js'
+import { isEnterKeyPressEvent } from '../utils.js'
 
 
 function TaskTag({ tag }) {
@@ -27,7 +27,7 @@ function TaskTagList({ tags }) {
 }
 
 
-function Task({ task, onUpdate, onRemove,  }) {
+function Task({ task, onUpdate, onRemove, }) {
   const [isEditable, setIsEditable] = useState(false)
 
   function onDoubleClick() {
@@ -45,23 +45,37 @@ function Task({ task, onUpdate, onRemove,  }) {
   }
 
   function onDescriptionEdit(event) {
+    if (event.target != this || !isEnterKeyPressEvent(event)) {
+      return
+    }
+
     task.description = event.target.value
     onUpdate(task)
   }
 
   return createElement(
     'div',
-    { className: `task ${task.isDone ? 'done' : '' }`},
+    { className: `task ${task.isDone ? 'done' : ''}` },
     [
       createElement(
         'div',
         { className: 'task-first-row' },
         [
           createElement('input', { className: 'task-checkbox', type: 'checkbox', checked: task.isDone, onClick: onCheckboxClick }),
-          AutoGrowingTextArea({ className: 'task-description', readOnly: !isEditable, value: task.description, onDblclick: onDoubleClick, onKeypress: onEnterKeyPress(onDescriptionEdit) }),
           createElement(
-            'button', 
-            { className: 'task-remove-button', type: 'submit', onClick: onRemoveButtonClick, innerHTML: removeTaskImage},
+            AutoGrowingTextArea,
+            {
+              className: 'task-description',
+              readOnly: !isEditable,
+              value: task.description,
+              required: true,
+              onDblclick: onDoubleClick,
+              onKeypress: onDescriptionEdit
+            }
+          ),
+          createElement(
+            'button',
+            { className: 'task-remove-button', type: 'submit', onClick: onRemoveButtonClick, innerHTML: removeTaskImage },
           )
         ]
       )
@@ -71,8 +85,10 @@ function Task({ task, onUpdate, onRemove,  }) {
 
 
 function TaskForm({ onSubmit }) {
-  const formRef = useRef(null)
-  const textRef = useRef(null)
+  const [isSubmitable, setIsSubmitable] = useState(false)
+  const formRef = useRef(undefined)
+  const textRef = useRef(undefined)
+  const submitButtonRef = useRef(undefined)
 
   function onFormSubmit(event) {
     event.preventDefault()
@@ -83,21 +99,40 @@ function TaskForm({ onSubmit }) {
     }
     onSubmit(newTask)
     formRef.current.reset()
+    setIsSubmitable(false)
   }
 
   function onTextKeypress(event) {
-    formRef.current.requestSubmit()
+    if (event.target != this) {
+      return
+    }
+
+    if (isEnterKeyPressEvent(event)) {
+      formRef.current.requestSubmit()
+      event.preventDefault()
+    }
+
+    setIsSubmitable(formRef.current.checkValidity())
   }
 
   return createElement(
     'form',
-    { className: 'task task-form', onSubmit: onFormSubmit, ref: formRef },
+    { className: 'task task-form', ref: formRef, onSubmit: onFormSubmit },
     [
       createElement(
         'button',
-        { className: 'task-form-button', type: 'submit', innerHTML: addTaskImage },
+        { className: `task-form-button ${isSubmitable ? '' : 'disabled' }`, type: 'submit', innerHTML: addTaskImage, ref: submitButtonRef, disabled: !isSubmitable },
       ),
-      AutoGrowingTextArea({ className: 'task-description', placeholder: 'New task description...', onKeypress: onEnterKeyPress(onTextKeypress), ref: textRef })
+      createElement(
+        AutoGrowingTextArea,
+        {
+          className: 'task-description',
+          placeholder: 'New task description...',
+          ref: textRef,
+          required: true,
+          onKeypress: onTextKeypress
+        }
+      )
     ]
   )
 }
@@ -127,7 +162,7 @@ export function TaskList({ taskRepository }) {
     'div',
     { className: 'tasks' },
     [
-      createElement(TaskForm, { onSubmit: onTaskFormSubmit }), 
+      createElement(TaskForm, { onSubmit: onTaskFormSubmit }),
       ...tasks.map(task => createElement(Task, { task, onUpdate: onTaskUpdate, onRemove: onTaskRemove }))
     ]
   )

@@ -116,7 +116,7 @@ main {
   color: currentColor;
 }
 
-.task-form-button:hover > svg > * {
+.task-form-button:hover:not(.disabled) > svg > * {
   stroke: var(--color-first)
 }
 

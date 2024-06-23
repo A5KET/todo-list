@@ -85,3 +85,8 @@ export function multiKeyComparator(keys=[]) {
     return 0
   }
 }
+
+
+export function isEnterKeyPressEvent(event) {
+  return (event.keyCode === 13 && !event.shiftKey)
+}
