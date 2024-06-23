@@ -23,3 +23,15 @@ export const userConstraints = {
     }
   }
 }
+
+
+export const userConstraints = {
+  username: {
+    presence: true,
+    type: 'string'
+  },
+  password: {
+    presence: true,
+    type: 'string'
+  }
+}

@@ -7,14 +7,15 @@ export const router = express.Router()
 
 
 router.post('/signup', async (req, res) => {
-  const userRepository = req.db.user
-  const { email, username, password } = req.body
+  const validationErrors = req.validation.validateNewUser(userData)
 
-  if (!areDefined(email, username, password)) {
-    return res.status(400).json({ error: 'Email, username and password are required' })
+  if (validationErrors) {
+    return res.status(422).json({ error: getAnyObjectValue(validationErrors) })
   }
 
+  const { email, username, password } = req.body
   const userData = { email, username, password }
+  const userRepository = req.db.user
 
   if (!(await userRepository.isEmailAvailable(email))) {
     return res.status(422).json({ error: 'Email is already taken' })
@@ -22,12 +23,6 @@ router.post('/signup', async (req, res) => {
 
   if (!(await userRepository.isUsernameAvailable(username))) {
     return res.status(422).json({ error: 'Username is already taken' })
-  }
-
-  const validationErrors = req.validation.validateUser(userData)
-
-  if (validationErrors) {
-    return res.status(422).json({ error: getAnyObjectValue(validationErrors) })
   }
 
   const user = await userRepository.add(userData)
@@ -38,6 +33,12 @@ router.post('/signup', async (req, res) => {
 
 
 router.post('/signin', async (req, res) => {
+  const validationErrors = req.validation.validateUser(req.body)
+
+  if (validationErrors) {
+    return res.status(422).json({ error: getAnyObjectValue(validationErrors) })
+  }
+
   const { email, password } = req.body
 
   if (!areDefined(email, password)) {
