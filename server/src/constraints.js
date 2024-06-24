@@ -1,4 +1,4 @@
-export const userConstraints = {
+export const newUserConstraints = {
   username: {
     presence: true,
     type: 'string',
@@ -26,7 +26,7 @@ export const userConstraints = {
 
 
 export const userConstraints = {
-  username: {
+  email: {
     presence: true,
     type: 'string'
   },
