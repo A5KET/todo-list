@@ -1,3 +1,30 @@
+export const newTaskConstraints = {
+  userId: {
+    presence: true,
+    type: 'number'
+  },
+  description: {
+    presence: true,
+    type: 'string',
+    length: {
+      maximum: 2048
+    }
+  },
+  isDone: {
+    presence: true,
+    type: 'boolean'
+  }
+}
+
+
+export const taskConstraints = Object.assign({
+  id: {
+    presence: true,
+    type: 'number'
+  }
+}, newTaskConstraints)
+
+
 export const newUserConstraints = {
   username: {
     presence: true,
