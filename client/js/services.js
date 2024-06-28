@@ -3,7 +3,7 @@ import { APIClient } from './requests.js'
 import { getObjectFromLocalStorage, saveObjectIntoLocalStorage } from './localstorage.js'
 
 
-export class LocalStorageTaskRepository {
+export class LocalStorageTaskService {
   constructor() {
     this.type = 'local'
     /** @type {Object[]} */
@@ -65,7 +65,7 @@ export class LocalStorageTaskRepository {
 }
 
 
-export class RemoteTaskRepository {
+export class RemoteTaskService {
   /**
    * 
    * @param {APIClient} api 
@@ -76,7 +76,9 @@ export class RemoteTaskRepository {
   }
 
   async getAll() {
-    return this.api.get('/tasks').then(tasks => tasks.sort(multiKeyComparator(['isDone', 'createdAt'])))
+    const tasks = await this.api.get('/tasks').then(tasks => tasks.sort(multiKeyComparator(['isDone', 'createdAt'])))
+
+    return tasks
   }
 
   async add(task) {

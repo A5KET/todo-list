@@ -13,13 +13,13 @@ async function start() {
   const database = new Database(client)
   const validator = new Validator()
 
-  const repositories = {
+  const services = {
     user: new UserRepository(database, SHA256HexEncryptor),
     session: new SessionRepository(database),
     task: new TaskRepository(database)
   }
 
-  const app = createApp(repositories, validator)
+  const app = createApp(services, validator)
 
   await client.connect()
   await database.createTables()

@@ -2,7 +2,7 @@ import { Database } from './database.js'
 import { generateToken } from './utils.js'
 
 
-export class Repository {
+export class Service {
   /**
    * 
    * @param {Database} db
@@ -13,7 +13,7 @@ export class Repository {
 }
 
 
-export class SessionRepository extends Repository {
+export class SessionService extends Service {
   async get(token) {
     return this.db.getSessionByToken(token)
   }
@@ -26,7 +26,7 @@ export class SessionRepository extends Repository {
 }
 
 
-export class UserRepository extends Repository {
+export class UserService extends Service {
   constructor(db, hashEncryptor) {
     super(db)
     this.hashEncryptor = hashEncryptor
@@ -59,7 +59,7 @@ export class UserRepository extends Repository {
 }
 
 
-export class TaskRepository extends Repository {
+export class TaskRepository extends Service {
   async getAll(userId) {
     return this.db.getTasks(userId)
   }
