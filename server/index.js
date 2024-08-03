@@ -1,7 +1,7 @@
 import pg from 'pg'
 
 import { Database } from './src/database.js'
-import { SessionRepository, TaskRepository, UserRepository } from './src/repositories.js'
+import { SessionService, TaskService, UserService } from './src/services.js'
 import { createApp } from './src/app.js'
 import { SHA256HexEncryptor } from './src/hash.js'
 import { Validator } from './src/validation.js'
@@ -14,9 +14,9 @@ async function start() {
   const validator = new Validator()
 
   const services = {
-    user: new UserRepository(database, SHA256HexEncryptor),
-    session: new SessionRepository(database),
-    task: new TaskRepository(database)
+    user: new UserService(database, SHA256HexEncryptor),
+    session: new SessionService(database),
+    task: new TaskService(database)
   }
 
   const app = createApp(services, validator)

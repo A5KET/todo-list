@@ -59,7 +59,7 @@ export class UserService extends Service {
 }
 
 
-export class TaskRepository extends Service {
+export class TaskService extends Service {
   async getAll(userId) {
     return this.db.getTasks(userId)
   }
