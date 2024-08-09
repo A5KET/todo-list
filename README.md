@@ -19,3 +19,33 @@ Sign Up and Sign In features. User can create account using only email and passw
 User's data will be validated using [validate.js](https://github.com/ansman/validate.js)
 
 <img width="1470" alt="image" src="https://github.com/user-attachments/assets/50f9ba14-b66b-4c41-917b-7678b7cdc46f">
+
+# Installation
+## Prerequisites
+- Node.js
+- PostgreSQL
+## Steps
+
+1. Clone the repository
+```bash
+$ git clone git@github.com:A5KET/todo-list.git
+$ cd todo-list/server
+```
+
+2. Install dependencies
+```bash
+$ cd server
+$ npm install
+```
+
+3. Configure environment variables
+```bash
+$ export PGSTRING="postgres://myuser:mypassword@localhost:5432/todolist"
+```
+
+4. Start the backend server
+```bash
+$ npm start
+```
+
+
